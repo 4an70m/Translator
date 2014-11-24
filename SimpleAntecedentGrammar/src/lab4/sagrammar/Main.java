@@ -14,8 +14,6 @@ public class Main {
 		GrammarReader gReader;
 		GrammarTable gTable;
 		try {
-			
-			
 			gReader = new GrammarReader();
 			gReader.readGrammar();
 			gTable = new GrammarTable(gReader);
