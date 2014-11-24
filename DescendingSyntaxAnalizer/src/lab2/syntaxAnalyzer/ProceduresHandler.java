@@ -14,6 +14,7 @@ public class ProceduresHandler {
 	ConstantTable constantTable;
 	IdentifierTable idTable;
 	LinkedList<Integer> errorCode;
+	LinkedList<Integer> errorLine;
 
 	int lexemeNum;
 
@@ -24,10 +25,14 @@ public class ProceduresHandler {
 		this.idTable = outputHandler.getIdTable();
 		lexemeNum = 0;
 		errorCode = new LinkedList<>();
+		errorLine = new LinkedList<>();
 	}
 
 	LinkedList<Integer> getErrorCode() {
 		return errorCode;
+	}
+	LinkedList<Integer> getErrorLine() {
+		return errorLine;
 	}
 
 	public int pProgram() {
@@ -42,22 +47,28 @@ public class ProceduresHandler {
 									return 0;
 								}
 								errorCode.push(116);
+								errorLine.push(outputTable.get(--lexemeNum).getLineNumber());					
 								return 116;
 							}
 						}
 						errorCode.push(115);
+						errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 						return 115;
 					}
 					errorCode.push(117);
+					errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 					return 117;
 				}
 				errorCode.push(114);
+				errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 				return 114;
 			}
 			errorCode.push(113);
+			errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 			return 113;
 		}
 		errorCode.push(100);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 100;
 	}
 
@@ -75,8 +86,12 @@ public class ProceduresHandler {
 					}
 				}
 			}
+			errorCode.push(119);
+			errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
+			return 119;
 		}
 		errorCode.push(101);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 101;
 	}
 
@@ -93,6 +108,7 @@ public class ProceduresHandler {
 			}
 		}
 		errorCode.push(102);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 102;
 	}
 
@@ -102,6 +118,7 @@ public class ProceduresHandler {
 			return 0;
 		}
 		errorCode.push(103);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 103;
 	}
 
@@ -119,6 +136,7 @@ public class ProceduresHandler {
 			}
 		}
 		errorCode.push(104);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 104;
 	}
 
@@ -151,6 +169,9 @@ public class ProceduresHandler {
 						return 0;
 					}
 				}
+				errorCode.push(118);
+				errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
+				return 118;
 			}
 		}
 		lexemeNum--;
@@ -176,6 +197,7 @@ public class ProceduresHandler {
 			}
 		}
 		errorCode.push(105);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 105;
 	}
 
@@ -191,6 +213,7 @@ public class ProceduresHandler {
 			return 0;
 		}
 		errorCode.push(106);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 106;
 	}
 
@@ -206,6 +229,7 @@ public class ProceduresHandler {
 			return 0;
 		}
 		errorCode.push(107);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 107;
 	}
 
@@ -232,10 +256,7 @@ public class ProceduresHandler {
 				return 0;
 			}
 		}
-		lexemeNum--;
-		if (pLogRatio() == 0) {
-			return 0;
-		}
+		
 		lexemeNum--;
 		if (outputTable.get(lexemeNum++).getLexemeCode() == 37) {
 			if (pLogExpr() == 0) {
@@ -243,6 +264,10 @@ public class ProceduresHandler {
 					return 0;
 				}
 			}
+		}
+		lexemeNum--;
+		if (pLogRatio() == 0) {
+			return 0;
 		}
 		lexemeNum--;
 		if (outputTable.get(lexemeNum++).getLexemeCode() == 25) {
@@ -253,6 +278,7 @@ public class ProceduresHandler {
 			return 0;
 		}
 		errorCode.push(108);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 108;
 	}
 
@@ -297,6 +323,7 @@ public class ProceduresHandler {
 
 		}
 		errorCode.push(109);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 109;
 	}
 
@@ -319,6 +346,7 @@ public class ProceduresHandler {
 
 		}
 		errorCode.push(110);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 110;
 	}
 
@@ -340,6 +368,7 @@ public class ProceduresHandler {
 			return 0;
 		}
 		errorCode.push(111);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 111;
 	}
 
@@ -361,6 +390,7 @@ public class ProceduresHandler {
 			}
 		}
 		errorCode.push(112);
+		errorLine.push(outputTable.get(--lexemeNum).getLineNumber());
 		return 112;
 	}
 }

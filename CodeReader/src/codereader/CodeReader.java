@@ -266,7 +266,7 @@ public class CodeReader {
 
 				case -1: {
 					// error state
-					ErrorHandler.error(errorCode);
+					ErrorHandler.error(errorCode, row);
 					return;
 				}
 				case 0: {
@@ -287,7 +287,7 @@ public class CodeReader {
 								ltReader.findConstant(), clReader);
 
 					if (errorCode != 0) {
-						ErrorHandler.error(errorCode);
+						ErrorHandler.error(errorCode, row);
 						return;
 					}
 
@@ -299,7 +299,7 @@ public class CodeReader {
 				}
 				default: {
 					// unknown exception
-					ErrorHandler.error(-1);
+					ErrorHandler.error(-1, row);
 				}
 				}
 

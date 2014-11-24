@@ -14,16 +14,18 @@ public class SyntaxAnalizer {
 
 	public void analizeSyntax() {
 		if (!outputHandler.getCodeWasTranslated()) {
-			ErrorHandler.error(99);
+			ErrorHandler.error(99, 0);
 			return;
 		}
 		pHandler = new ProceduresHandler(outputHandler);
 		
 		if (pHandler.pProgram() != 0)
 		{
-			for (int eCode : pHandler.getErrorCode())
-			ErrorHandler.error(eCode);
+			for (int i = 0; i < pHandler.getErrorCode().size(); i++)
+				ErrorHandler.error(pHandler.getErrorCode().get(i), pHandler.getErrorLine().get(i));
 		}
+		
+		System.out.println("Syntax analizer worked.");
 
 	}
 

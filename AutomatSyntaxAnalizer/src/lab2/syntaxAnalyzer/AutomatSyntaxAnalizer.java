@@ -14,12 +14,16 @@ public class AutomatSyntaxAnalizer {
 
 	public void analizeSyntax() {
 		if (!outputHandler.getCodeWasTranslated()) {
-			ErrorHandler.error(99);
+			ErrorHandler.error(99, 0);
 			return;
 		}
 		aHandler = new AutomatHandler(outputHandler);
 		aHandler.runMain();
-		System.out.println("Finished, yay!");
+		if (aHandler.getErrorCode() != 0)
+			ErrorHandler
+					.error(aHandler.getErrorCode(), aHandler.getErrorLine());
+		else
+			System.out.println("Finished, yay!");
 	}
 
 }

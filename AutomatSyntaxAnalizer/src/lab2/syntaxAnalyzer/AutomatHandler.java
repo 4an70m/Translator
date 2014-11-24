@@ -1,10 +1,6 @@
 package lab2.syntaxAnalyzer;
 
-import java.util.LinkedList;
-
 import codereader.OutputHandler;
-import codereader.OutputTables.ConstantTable;
-import codereader.OutputTables.IdentifierTable;
 import codereader.OutputTables.OutputTable;
 
 public class AutomatHandler {
@@ -16,6 +12,7 @@ public class AutomatHandler {
 	int errorCode;
 	int lexemeNum;
 	int state;
+	int errorLine;
 
 	public AutomatHandler(OutputHandler outputHandler) {
 		this.outputHandler = outputHandler;
@@ -24,6 +21,7 @@ public class AutomatHandler {
 		errorCode = 0;
 		lexemeNum = 0;
 		state = 0;
+		errorLine = 0;
 	}
 
 	public void runMain() {
@@ -35,7 +33,8 @@ public class AutomatHandler {
 					state = 12;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 100;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 12: {
@@ -43,7 +42,8 @@ public class AutomatHandler {
 					state = 13;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 113;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 13: {
@@ -51,7 +51,8 @@ public class AutomatHandler {
 					state = 14;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 114;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 14: {
@@ -60,6 +61,7 @@ public class AutomatHandler {
 					break;
 				}
 				errorCode = 0;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 15: {
@@ -72,7 +74,8 @@ public class AutomatHandler {
 					state = 14;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 101;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 16: {
@@ -80,7 +83,8 @@ public class AutomatHandler {
 					state = 17;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 103;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 17: {
@@ -89,7 +93,7 @@ public class AutomatHandler {
 					break;
 				}
 				lexemeNum--;
-				if (outputTable.get(lexemeNum++).getLexemeCode() == 3) {// begin 
+				if (outputTable.get(lexemeNum++).getLexemeCode() == 3) {// begin
 					stack.push(18);
 					this.runOperation();
 					state = stack.pop();
@@ -97,7 +101,8 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 115;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 18: {
@@ -113,7 +118,8 @@ public class AutomatHandler {
 				if (outputTable.get(lexemeNum++).getLexemeCode() == 4) {// end.
 					return;
 				}
-				errorCode = 150;
+				errorCode = 116;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			}
@@ -147,7 +153,7 @@ public class AutomatHandler {
 				}
 				lexemeNum--;
 				if (outputTable.get(lexemeNum++).getLexemeCode() == 10) {// if
-					stack.push(18);
+					stack.push(30);
 					this.runLogicExpr();
 					state = stack.pop();
 					if (errorCode != 0)
@@ -159,7 +165,8 @@ public class AutomatHandler {
 					state = 32;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 105;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 22: {
@@ -167,7 +174,8 @@ public class AutomatHandler {
 					state = 23;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 120;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 23: {
@@ -175,14 +183,16 @@ public class AutomatHandler {
 					state = 24;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 102;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 24: {
 				if (outputTable.get(lexemeNum++).getLexemeCode() == 34) {// )
 					return;
 				}
-				errorCode = 0;
+				errorCode = 121;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 25: {
@@ -190,7 +200,8 @@ public class AutomatHandler {
 					state = 26;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 120;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 26: {
@@ -198,7 +209,8 @@ public class AutomatHandler {
 					state = 27;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 102;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 27: {
@@ -210,7 +222,8 @@ public class AutomatHandler {
 				if (outputTable.get(lexemeNum++).getLexemeCode() == 34) {// )
 					return;
 				}
-				errorCode = 150;
+				errorCode = 121;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 28: {
@@ -222,14 +235,15 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 118;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 29: {
 				return;
 			}
 			case 30: {
-				if (outputTable.get(lexemeNum++).getLexemeCode() == 30) {// then
+				if (outputTable.get(lexemeNum++).getLexemeCode() == 12) {// then
 					stack.push(31);
 					this.runOperation();
 					state = stack.pop();
@@ -237,7 +251,8 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 122;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 
 			}
@@ -259,9 +274,9 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 123;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
-
 			}
 
 			case 32: {
@@ -273,7 +288,8 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 150;
+				errorCode = 124;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 
 			}
@@ -327,7 +343,8 @@ public class AutomatHandler {
 					state = 133;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 125;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 133: {
@@ -398,7 +415,8 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 106;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			}
@@ -431,7 +449,8 @@ public class AutomatHandler {
 						return;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 110;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 142: {
@@ -439,7 +458,8 @@ public class AutomatHandler {
 					state = 143;
 					break;
 				}
-				errorCode = 0;
+				errorCode = 121;
+				errorLine = outputTable.get(--lexemeNum).getLineNumber();
 				return;
 			}
 			case 143: {
@@ -468,6 +488,14 @@ public class AutomatHandler {
 			}
 		}
 
+	}
+
+	public int getErrorCode() {
+		return errorCode;
+	}
+
+	public int getErrorLine() {
+		return errorLine;
 	}
 
 }
