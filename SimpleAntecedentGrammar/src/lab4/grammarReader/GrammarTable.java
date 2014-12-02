@@ -18,8 +18,11 @@ public class GrammarTable {
 
 	public void buildTable() {
 		evaluateEquals();
+		
 		evaluateLast();
+	
 		evaluateFirst();
+	
 		evaluateHash();
 		printTable();
 	}

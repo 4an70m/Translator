@@ -317,15 +317,15 @@ public class CodeReader {
 	}
 
 	public ConstantTable getConstantTable() {
-		return getConstantTable();
+		return outputHandler.getConstantTable();
 	}
 
 	public IdentifierTable getIdTable() {
-		return getIdTable();
+		return outputHandler.getIdTable();
 	}
 
 	public OutputTable getOutputTable() {
-		return getOutputTable();
+		return outputHandler.getOutputTable();
 	}
 
 	public OutputHandler getOutputHandler() {

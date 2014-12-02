@@ -151,6 +151,10 @@ public class ErrorHandler {
 					+ ". ']' not found.");
 			break;
 		}
+		case -1: {
+			System.out.println("Line: " + (line -1) + " has an error.");
+			break;
+		}
 		default: {
 			System.out.println("Unknown condition");
 		}
