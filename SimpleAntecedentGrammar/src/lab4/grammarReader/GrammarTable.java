@@ -7,6 +7,8 @@ public class GrammarTable {
 	GrammarReader gReader;
 	ArrayList<String> headline;
 	char[][] table;
+	ArrayList<String> first;
+	ArrayList<String> last;
 
 	public GrammarTable(GrammarReader gReader) {
 		this.gReader = gReader;
@@ -28,6 +30,9 @@ public class GrammarTable {
 	}
 
 	public void evaluateEquals() {
+		for(int i = 0; i < gReader.getUniqueLexSize() + 1; i++)
+			for(int j = 0; j < gReader.getUniqueLexSize() + 1; j++)
+				table[i][j] = ' ';
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			String[] subparts = unit.getTerminal().split(" ");
 			for (int i = 0; i < subparts.length - 1; i++) {
@@ -42,8 +47,11 @@ public class GrammarTable {
 			for (int i = 0; i < subpart.length - 1; i++) {
 				if (subpart[i].matches("<(.+)>")
 						&& !subpart[i + 1].matches("<(.+)>")) {
-					ArrayList<String> last = lastPlus(subpart[i]);
+					last = new ArrayList<>();
+					lastPlus(subpart[i]);
 					for (String sublast : last) {
+						if(getSign(subpart[i], sublast) != ' ') 
+							System.out.println("> error: " + subpart[i] + " " + getSign(subpart[i], sublast) + " " + sublast);
 						setSign(sublast, subpart[i + 1], '>');
 					}
 				}
@@ -57,8 +65,11 @@ public class GrammarTable {
 			for (int i = 0; i < subpart.length - 1; i++) {
 				if (!subpart[i].matches("<(.+)>")
 						&& subpart[i + 1].matches("<(.+)>")) {
-					ArrayList<String> first= firstPlus(subpart[i + 1]);
+					first = new ArrayList<>();
+					firstPlus(subpart[i + 1]);
 					for (String subfirst : first) {
+						if(getSign(subpart[i], subfirst) != ' ') 
+							System.out.println("< error: " + subpart[i] + " " + getSign(subpart[i], subfirst) + " " + subfirst);
 						setSign(subpart[i], subfirst, '<');
 					}
 				}
@@ -89,32 +100,33 @@ public class GrammarTable {
 		return table[row][col];
 	}
 
-	public ArrayList<String> firstPlus(String lex) {
-		ArrayList<String> first = new ArrayList<>();
+	public void firstPlus(String lex) {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			if (unit.getRule().equals(lex)) {
 				String[] subparts = unit.getTerminal().split(" ");
-				first.add(subparts[0]);
-				if (subparts[0].matches("<(.+)>")) {
-					first.addAll(firstPlus(subparts[0]));
+				if (!first.contains(subparts[0])) first.add(subparts[0]);
+				else continue;
+				if (subparts[0].matches("<(.+)>") && !first.get(first.size()-1).contains(lex)) {
+					firstPlus(subparts[0]);
 				}
 			}
 		}
-		return first;
+		return;
 	}
 
-	public ArrayList<String> lastPlus(String lex) {
-		ArrayList<String> last = new ArrayList<>();
+	public void lastPlus(String lex) {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			if (unit.getRule().equals(lex)) {
 				String[] subparts = unit.getTerminal().split(" ");
-				last.add(subparts[subparts.length - 1]);
-				if (subparts[subparts.length - 1].matches("<(.+)>")) {
-					last.addAll(lastPlus(subparts[subparts.length - 1]));
+				if (!last.contains(subparts[subparts.length - 1])) 
+					last.add(subparts[subparts.length - 1]);
+				else continue;
+				if (subparts[subparts.length - 1].matches("<(.+)>")/* && !last.get(last.size()-1).contains(lex)*/) {
+					lastPlus(subparts[subparts.length - 1]);
 				}
 			}
 		}
-		return last;
+		return;
 	}
 
 	public void printTable() {
