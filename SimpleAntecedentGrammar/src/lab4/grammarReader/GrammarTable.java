@@ -50,8 +50,8 @@ public class GrammarTable {
 					last = new ArrayList<>();
 					lastPlus(subpart[i]);
 					for (String sublast : last) {
-						if(getSign(subpart[i], sublast) != ' ') 
-							System.out.println("> error: " + subpart[i] + " " + getSign(subpart[i], sublast) + " " + sublast);
+						if(getSign(sublast, subpart[i + 1]) != ' ' && getSign(sublast, subpart[i + 1]) != '>') 
+							System.out.println("> error: " + sublast + " " + getSign(sublast, subpart[i + 1]) + " " + subpart[i + 1]);
 						setSign(sublast, subpart[i + 1], '>');
 					}
 				}
@@ -68,7 +68,7 @@ public class GrammarTable {
 					first = new ArrayList<>();
 					firstPlus(subpart[i + 1]);
 					for (String subfirst : first) {
-						if(getSign(subpart[i], subfirst) != ' ') 
+						if(getSign(subpart[i], subfirst) != ' ' && getSign(subpart[i], subfirst) != '<') 
 							System.out.println("< error: " + subpart[i] + " " + getSign(subpart[i], subfirst) + " " + subfirst);
 						setSign(subpart[i], subfirst, '<');
 					}
@@ -106,7 +106,7 @@ public class GrammarTable {
 				String[] subparts = unit.getTerminal().split(" ");
 				if (!first.contains(subparts[0])) first.add(subparts[0]);
 				else continue;
-				if (subparts[0].matches("<(.+)>") && !first.get(first.size()-1).contains(lex)) {
+				if (subparts[0].matches("<(.+)>")) {
 					firstPlus(subparts[0]);
 				}
 			}
@@ -121,7 +121,7 @@ public class GrammarTable {
 				if (!last.contains(subparts[subparts.length - 1])) 
 					last.add(subparts[subparts.length - 1]);
 				else continue;
-				if (subparts[subparts.length - 1].matches("<(.+)>")/* && !last.get(last.size()-1).contains(lex)*/) {
+				if (subparts[subparts.length - 1].matches("<(.+)>")) {
 					lastPlus(subparts[subparts.length - 1]);
 				}
 			}
