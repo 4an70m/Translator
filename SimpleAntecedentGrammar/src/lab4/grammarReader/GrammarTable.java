@@ -1,5 +1,9 @@
 package lab4.grammarReader;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GrammarTable {
@@ -20,18 +24,24 @@ public class GrammarTable {
 
 	public void buildTable() {
 		evaluateEquals();
-		
+
 		evaluateLast();
-	
+
 		evaluateFirst();
-	
+
 		evaluateHash();
 		printTable();
+		try {
+			outputToFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void evaluateEquals() {
-		for(int i = 0; i < gReader.getUniqueLexSize() + 1; i++)
-			for(int j = 0; j < gReader.getUniqueLexSize() + 1; j++)
+		for (int i = 0; i < gReader.getUniqueLexSize() + 1; i++)
+			for (int j = 0; j < gReader.getUniqueLexSize() + 1; j++)
 				table[i][j] = ' ';
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			String[] subparts = unit.getTerminal().split(" ");
@@ -50,8 +60,11 @@ public class GrammarTable {
 					last = new ArrayList<>();
 					lastPlus(subpart[i]);
 					for (String sublast : last) {
-						if(getSign(sublast, subpart[i + 1]) != ' ' && getSign(sublast, subpart[i + 1]) != '>') 
-							System.out.println("> error: " + sublast + " " + getSign(sublast, subpart[i + 1]) + " " + subpart[i + 1]);
+						if (getSign(sublast, subpart[i + 1]) != ' '
+								&& getSign(sublast, subpart[i + 1]) != '>')
+							System.out.println("> error: " + sublast + " "
+									+ getSign(sublast, subpart[i + 1]) + " "
+									+ subpart[i + 1]);
 						setSign(sublast, subpart[i + 1], '>');
 					}
 				}
@@ -68,8 +81,11 @@ public class GrammarTable {
 					first = new ArrayList<>();
 					firstPlus(subpart[i + 1]);
 					for (String subfirst : first) {
-						if(getSign(subpart[i], subfirst) != ' ' && getSign(subpart[i], subfirst) != '<') 
-							System.out.println("< error: " + subpart[i] + " " + getSign(subpart[i], subfirst) + " " + subfirst);
+						if (getSign(subpart[i], subfirst) != ' '
+								&& getSign(subpart[i], subfirst) != '<')
+							System.out.println("< error: " + subpart[i] + " "
+									+ getSign(subpart[i], subfirst) + " "
+									+ subfirst);
 						setSign(subpart[i], subfirst, '<');
 					}
 				}
@@ -104,8 +120,10 @@ public class GrammarTable {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			if (unit.getRule().equals(lex)) {
 				String[] subparts = unit.getTerminal().split(" ");
-				if (!first.contains(subparts[0])) first.add(subparts[0]);
-				else continue;
+				if (!first.contains(subparts[0]))
+					first.add(subparts[0]);
+				else
+					continue;
 				if (subparts[0].matches("<(.+)>")) {
 					firstPlus(subparts[0]);
 				}
@@ -118,9 +136,10 @@ public class GrammarTable {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			if (unit.getRule().equals(lex)) {
 				String[] subparts = unit.getTerminal().split(" ");
-				if (!last.contains(subparts[subparts.length - 1])) 
+				if (!last.contains(subparts[subparts.length - 1]))
 					last.add(subparts[subparts.length - 1]);
-				else continue;
+				else
+					continue;
 				if (subparts[subparts.length - 1].matches("<(.+)>")) {
 					lastPlus(subparts[subparts.length - 1]);
 				}
@@ -141,5 +160,48 @@ public class GrammarTable {
 			}
 			System.out.println();
 		}
+	}
+
+	public void outputToFile() throws IOException {
+		File file = new File("Output.html");
+		file.setWritable(true);
+		BufferedWriter br = new BufferedWriter(new FileWriter(file));
+		br.write("<html>");
+		br.newLine();
+		br.write("<head>");
+		br.write("<H1>" + "Table" + "</H1>");
+		br.write("</head>");
+		br.newLine();
+		br.write("<body>");
+		br.newLine();
+		br.write("<table border = 1>");
+		br.newLine();
+		br.write("<th>#</th>");
+		for (int i = 0; i < gReader.getUniqueLexSize() + 1; i++) {
+			StringBuilder line = new StringBuilder();
+			line.append("<th>");
+			line.append(headline.get(i));
+			line.append("</th>");
+			br.write(line.toString());
+			br.newLine();
+		}
+		for (int i = 0; i < gReader.getUniqueLexSize() + 1; i++) {
+			StringBuilder line = new StringBuilder();
+			line.append("<tr>");
+			line.append("<td>" + headline.get(i) + "</td>");
+			for (int j = 0; j < gReader.getUniqueLexSize() + 1; j++) {
+				line.append("<td>" + table[i][j] + "</td>");
+			}
+			line.append("</tr>");
+			br.write(line.toString());
+			br.newLine();
+		}
+		br.write("</table>");
+		br.newLine();
+		br.write("</body>");
+		br.newLine();
+		br.write("</html>");
+		br.flush();
+		br.close();
 	}
 }

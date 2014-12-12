@@ -47,11 +47,11 @@ public class GrammarReader {
 					uniqeLex.add(lex.trim());
 				}
 				grammarVocabulary.add(gUnit);
-				System.out.println(gUnit);
+				//System.out.println(gUnit);
 			}
 
 		}
-		System.out.println(uniqeLex);
+		//System.out.println(uniqeLex);
 		return true;
 	}
 
