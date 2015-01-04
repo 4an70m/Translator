@@ -18,6 +18,7 @@ public class Main {
 			gReader.readGrammar();
 			gTable = new GrammarTable(gReader);
 			gTable.buildTable();
+			gTable.outputToFile();
 			
 			
 		} catch (FileNotFoundException e) {

@@ -1,7 +1,5 @@
 package Analyzer;
 
-import java.io.FileNotFoundException;
-
 import lab.StateReader.Rule;
 import lab.StateReader.State;
 import lab.StateReader.StatesTable;

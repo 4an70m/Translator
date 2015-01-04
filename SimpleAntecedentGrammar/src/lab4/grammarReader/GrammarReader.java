@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.io.ObjectInputStream.GetField;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
@@ -47,11 +46,9 @@ public class GrammarReader {
 					uniqeLex.add(lex.trim());
 				}
 				grammarVocabulary.add(gUnit);
-				//System.out.println(gUnit);
 			}
 
 		}
-		//System.out.println(uniqeLex);
 		return true;
 	}
 

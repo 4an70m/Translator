@@ -30,13 +30,6 @@ public class GrammarTable {
 		evaluateFirst();
 
 		evaluateHash();
-		printTable();
-		try {
-			outputToFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void evaluateEquals() {
