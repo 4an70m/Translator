@@ -64,14 +64,22 @@ public class StatesTable {
 	public ArrayList<State> getTable() {
 		return table;
 	}
-	
-	public State getState (int state)
-	{
-		for(State st : table)
-		{
+
+	public State getState(int state) {
+		for (State st : table) {
 			if (st.getState() == state)
 				return st;
 		}
 		return null;
+	}
+
+	public int getErrorByLexemeCode(int lexemeCode) {
+		for (State st : table) {
+			for (Rule rl : st.getRules()) {
+				if(lexemeCode == rl.getLexeme())
+					return rl.getError();
+			}
+		}
+		return -1;
 	}
 }

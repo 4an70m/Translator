@@ -1,11 +1,5 @@
 program test
-var i, n: real
+var , i: real
 begin
-i = 5 + (1 - 2) * 7;
-read(n);
-while n >= i
-do
-while n >= i
-do
-write(n)
+i = 5;
 end.

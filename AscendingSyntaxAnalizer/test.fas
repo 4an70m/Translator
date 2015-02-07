@@ -1,0 +1,9 @@
+program test
+var , i, n: real
+begin
+i = 3;
+read(, n);
+while n >= i
+do
+write(, n)
+end.

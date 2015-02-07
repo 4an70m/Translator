@@ -23,10 +23,13 @@ public class Main {
 		cr.readCode();
 		
 		AutomatHandler ah = new AutomatHandler(cr, st);
-		ah.read();
+		if(cr.isCodeTranslated())
+		{
+			ah.read();
 		if (ah.getErrorCode() != 0)
 			ErrorHandler.error(ah.getErrorCode(), ah.getErrorLine());
 		else
 			System.out.println("Code is correct!");
+		}
 	}
 }

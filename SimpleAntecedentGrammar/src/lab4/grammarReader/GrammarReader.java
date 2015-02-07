@@ -64,4 +64,14 @@ public class GrammarReader {
 	{
 		return grammarVocabulary;
 	}
+	
+	public String findRuleByTerminal(String terminal)
+	{
+		for (GrammarUnit gUnit : grammarVocabulary)
+		{
+			if(gUnit.getTerminal().equals(terminal))
+				return gUnit.getRule();
+		}
+		return null;
+	}
 }

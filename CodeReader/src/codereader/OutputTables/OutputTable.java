@@ -6,6 +6,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.text.rtf.RTFEditorKit;
+
 public class OutputTable {
 
 	private ArrayList<OutputTableItem> outputTable;
@@ -40,5 +42,8 @@ public class OutputTable {
 			return outputTable.get(index);
 		return null;
 	}
-
+	
+	public int size() {
+		return outputTable.size();
+	}
 }

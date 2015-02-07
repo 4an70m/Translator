@@ -32,7 +32,7 @@ public class GrammarTable {
 		evaluateHash();
 	}
 
-	public void evaluateEquals() {
+	private void evaluateEquals() {
 		for (int i = 0; i < gReader.getUniqueLexSize() + 1; i++)
 			for (int j = 0; j < gReader.getUniqueLexSize() + 1; j++)
 				table[i][j] = ' ';
@@ -44,7 +44,7 @@ public class GrammarTable {
 		}
 	}
 
-	public void evaluateLast() {
+	private void evaluateLast() {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			String[] subpart = unit.getTerminal().split(" ");
 			for (int i = 0; i < subpart.length - 1; i++) {
@@ -65,7 +65,7 @@ public class GrammarTable {
 		}
 	}
 
-	public void evaluateFirst() {
+	private void evaluateFirst() {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			String[] subpart = unit.getTerminal().split(" ");
 			for (int i = 0; i < subpart.length - 1; i++) {
@@ -86,7 +86,7 @@ public class GrammarTable {
 		}
 	}
 
-	public void evaluateHash() {
+	private void evaluateHash() {
 		for (int i = 0; i < headline.size(); i++) {
 			if (headline.get(i) == "#")
 				continue;
@@ -95,10 +95,9 @@ public class GrammarTable {
 		}
 	}
 
-	public void setSign(String x, String y, char sign) {
+	private void setSign(String x, String y, char sign) {
 		int row = headline.lastIndexOf(x);
 		int col = headline.lastIndexOf(y);
-
 		table[row][col] = sign;
 	}
 
@@ -109,7 +108,7 @@ public class GrammarTable {
 		return table[row][col];
 	}
 
-	public void firstPlus(String lex) {
+	private void firstPlus(String lex) {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			if (unit.getRule().equals(lex)) {
 				String[] subparts = unit.getTerminal().split(" ");
@@ -125,7 +124,7 @@ public class GrammarTable {
 		return;
 	}
 
-	public void lastPlus(String lex) {
+	private void lastPlus(String lex) {
 		for (GrammarUnit unit : gReader.getGrammarVocabulary()) {
 			if (unit.getRule().equals(lex)) {
 				String[] subparts = unit.getTerminal().split(" ");
@@ -197,4 +196,10 @@ public class GrammarTable {
 		br.flush();
 		br.close();
 	}
+
+	public String findRule(String terminal)
+	{
+		return gReader.findRuleByTerminal(terminal);
+	}
 }
+

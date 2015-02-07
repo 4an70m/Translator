@@ -331,5 +331,9 @@ public class CodeReader {
 	public OutputHandler getOutputHandler() {
 		return outputHandler;
 	}
+	
+	public boolean isCodeTranslated() {
+		return outputHandler.getCodeWasTranslated();
+	}
 
 }

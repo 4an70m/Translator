@@ -17,7 +17,7 @@ public class Lexeme {
 	}
 
 	public void addLexeme(String[] symbols) {
-		for (int i = 1; i < symbols.length; i++) {
+		for (int i = 0; i < symbols.length; i++) {
 			if (symbols[i] != "")
 				this.symbols.add(symbols[i]);
 		}

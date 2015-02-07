@@ -5,5 +5,5 @@ i = 3.3E+2;
 read(n);
 while n >= i
 do
-write(n);
+write(n)
 end.
