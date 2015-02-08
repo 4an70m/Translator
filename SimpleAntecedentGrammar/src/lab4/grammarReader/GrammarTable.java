@@ -22,6 +22,13 @@ public class GrammarTable {
 		headline.add("#");
 	}
 
+	/**
+	 * <br>
+	 * <i>public void buildTable()</i> <br>
+	 * <p>
+	 * Reads grammar and builds a relations table.
+	 * </p>
+	 */
 	public void buildTable() {
 		evaluateEquals();
 
@@ -101,6 +108,20 @@ public class GrammarTable {
 		table[row][col] = sign;
 	}
 
+	/**
+	 * <br>
+	 * <i>public char getSign(String x, String y)</i> <br>
+	 * <p>
+	 * Gets relation sign from the table according to parameters.
+	 * </p>
+	 * <br>
+	 * 
+	 * @param x
+	 *            - first coordinate of the table, row
+	 * @param y
+	 *            - second coordinate of the table, col
+	 * @return
+	 */
 	public char getSign(String x, String y) {
 		int row = headline.lastIndexOf(x);
 		int col = headline.lastIndexOf(y);
@@ -140,6 +161,14 @@ public class GrammarTable {
 		return;
 	}
 
+	/**
+	 * <br>
+	 * <i>public void printTable()</i> <br>
+	 * <p>
+	 * Outputs a table right to console. Shifts cols if the table is too big.
+	 * </p>
+	 * <br>
+	 */
 	public void printTable() {
 		System.out.print("\t");
 		for (int i = 0; i < gReader.getUniqueLexSize() + 1; i++)
@@ -153,7 +182,16 @@ public class GrammarTable {
 			System.out.println();
 		}
 	}
-
+	
+	/**
+	 * <br>
+	 * <i>public void outputToFile()</i>
+	 * <br>
+	 * <p>Prints table to the output.html file in the curent directory.
+	 * </p>
+	 * <br>
+	 * @throws IOException
+	 */
 	public void outputToFile() throws IOException {
 		File file = new File("Output.html");
 		file.setWritable(true);
@@ -197,9 +235,17 @@ public class GrammarTable {
 		br.close();
 	}
 
-	public String findRule(String terminal)
-	{
+	/**
+	 * <br>
+	 * <i>public String findRule(String terminal)</i>
+	 * <br>
+	 * <p>Finds a rule according to the terminal.
+	 * </p>
+	 * <br>
+	 * @param terminal - terminal of the rule we want to find
+	 * @return rule - rule according to the terminal
+	 */
+	public String findRule(String terminal) {
 		return gReader.findRuleByTerminal(terminal);
 	}
 }
-

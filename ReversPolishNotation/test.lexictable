@@ -1,0 +1,12 @@
+<lexictable>
+17~ +
+18~ -
+19~ /
+20~ *
+32~ E
+33~ (
+34~ )
+35~ <identifier>
+36~ <constant>
+39~ <space>
+<!lexictable>
