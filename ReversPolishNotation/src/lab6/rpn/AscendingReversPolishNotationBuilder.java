@@ -8,12 +8,12 @@ import java.io.IOException;
 
 import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 
-import codereader.CodeReader;
-import codereader.OutputTables.OutputTableItem;
-import Analyzer.Stack;
+import analyzer.lexical.state.reader.StateLexicalAnalyzer;
+import analyzer.syntax.ascending.OutputTableBuilder;
+import analyzer.syntax.automat.Stack;
+import analyzer.util.output.outputtable.OutputTableItem;
 import lab4.grammarReader.GrammarReader;
 import lab4.grammarReader.GrammarTable;
-import lab5.builder.OutputTableBuilder;
 
 public class AscendingReversPolishNotationBuilder implements
 		ReversPolishNotationBuilder {
@@ -26,7 +26,7 @@ public class AscendingReversPolishNotationBuilder implements
 	private StringBuilder tempString; // string for parsing
 	private int i = 0; // current step
 	private int step = 0;
-	private CodeReader codeReader;
+	private StateLexicalAnalyzer codeReader;
 	private boolean isFinished = false;
 	private Stack<String> stackTemp;
 	private OutputTableBuilder builder;
@@ -49,7 +49,7 @@ public class AscendingReversPolishNotationBuilder implements
 		stackTemp = new Stack<>();
 		try {
 			builder = new OutputTableBuilder();
-			codeReader = new CodeReader();
+			codeReader = new StateLexicalAnalyzer();
 			codeReader.readLexicAndClassTable();
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -68,7 +68,7 @@ public class AscendingReversPolishNotationBuilder implements
 			this.expression = expression;
 			bw.write(expression);
 			bw.close();
-			codeReader.readCode();
+			codeReader.analyzeCode();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

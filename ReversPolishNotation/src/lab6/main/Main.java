@@ -1,8 +1,5 @@
 package lab6.main;
 
-import java.io.IOException;
-
-import codereader.CodeReader;
 import lab6.rpn.AscendingReversPolishNotationBuilder;
 import lab6.rpn.ReversPolishNotationBuilder;
 
