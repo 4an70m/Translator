@@ -1,5 +1,0 @@
-program test
-var , i: real
-begin
-i = 5;
-end.
