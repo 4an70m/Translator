@@ -1,0 +1,11 @@
+program test
+var ,a:real
+begin
+a = 0;
+while a < 10 do 
+	read(, a);
+if a < 20 then
+	write(, a)
+else
+	read(, a)
+end.

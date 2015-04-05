@@ -1,12 +1,11 @@
 package analyzer.util.handler;
 
 import java.io.IOException;
-import java.util.Formatter;
 
-import analyzer.lexical.state.classtable.ClasstableReader;
 import analyzer.util.output.ConstantTable;
 import analyzer.util.output.IdentifierTable;
 import analyzer.util.output.outputtable.OutputTable;
+import analyzer.util.tablereader.classtable.ClasstableReader;
 
 public class OutputHandler {
 
@@ -15,6 +14,7 @@ public class OutputHandler {
 	private ConstantTable cTable;
 	private boolean isBody;
 	private boolean codeWasTranslated;
+	private boolean codeWasAnalyzed;
 
 	public OutputHandler() {
 		oTable = new OutputTable();
@@ -22,6 +22,7 @@ public class OutputHandler {
 		cTable = new ConstantTable();
 		isBody = false;
 		codeWasTranslated = false;
+		codeWasAnalyzed = false;
 	}
 
 	public int output(int row, int result, String lexeme, int identifier,
@@ -94,8 +95,16 @@ public class OutputHandler {
 		return codeWasTranslated;
 	}
 
+	public boolean getCodeWasAnalyzed() {
+		return codeWasAnalyzed;
+	}
+
 	public void setCodeWasTranslated(boolean codeWasTranslated) {
 		this.codeWasTranslated = codeWasTranslated;
+	}
+
+	public void setCodeWasAnalyzed(boolean codeWasAnalyzed) {
+		this.codeWasAnalyzed = codeWasAnalyzed;
 	}
 
 }

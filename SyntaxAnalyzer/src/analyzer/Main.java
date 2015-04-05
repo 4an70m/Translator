@@ -3,13 +3,9 @@ package analyzer;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import analyzer.lexical.state.reader.StateLexicalAnalyzer;
+import analyzer.lexical.state.StateLexicalAnalyzer;
 import analyzer.syntax.ascending.AscendingSyntaxAnalyzer;
-import analyzer.syntax.automat.AutomatSyntaxAnalyzer;
 import analyzer.syntax.blank.SyntaxAnalyzer;
-import analyzer.syntax.descending.DescendingSyntaxAnalyzer;
-import analyzer.syntax.state.StateSyntaxAnalyzer;
-import analyzer.util.handler.OutputHandler;
 
 public class Main {
 

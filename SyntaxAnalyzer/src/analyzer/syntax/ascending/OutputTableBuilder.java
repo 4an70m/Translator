@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public class OutputTableBuilder {
 
-	private File outputTable;
+	
 	private BufferedWriter bWriter;
 
 	public OutputTableBuilder() throws IOException {

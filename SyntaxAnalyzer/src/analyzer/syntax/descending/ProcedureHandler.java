@@ -37,14 +37,14 @@ public class ProcedureHandler {
 	}
 
 	public int pProgram() {
-		if (outputTable.get(lexemeNumber++).getLexemeCode() == 1) {
-			if (outputTable.get(lexemeNumber++).getLexemeCode() == 35) {
-				if (outputTable.get(lexemeNumber++).getLexemeCode() == 2) {
+		if (outputTable.get(lexemeNumber++).getLexemeCode() == 1) { // program
+			if (outputTable.get(lexemeNumber++).getLexemeCode() == 35) {// id
+				if (outputTable.get(lexemeNumber++).getLexemeCode() == 2) {// var
 					if (pVarList() == 0) {
-						if (outputTable.get(lexemeNumber++).getLexemeCode() == 3) {
+						if (outputTable.get(lexemeNumber++).getLexemeCode() == 3) {// begin
 							if (pOperationList() == 0) {
 								if (outputTable.get(lexemeNumber++)
-										.getLexemeCode() == 4) {
+										.getLexemeCode() == 4) {// end.
 									return 0;
 								}
 								errorCode.push(116);
@@ -103,17 +103,25 @@ public class ProcedureHandler {
 		if (outputTable.get(lexemeNumber++).getLexemeCode() == 14) {
 			if (outputTable.get(lexemeNumber++).getLexemeCode() == 35) {
 				if (outputTable.get(lexemeNumber++).getLexemeCode() == 14) {
+					lexemeNumber--;
 					if (pIdList() == 0) {
 						return 0;
 					}
 				} else {
 					lexemeNumber--;
-					return 0;
+					if (pIdList() == 0) {
+						return 0;
+					} else {
+						lexemeNumber--;
+						return 0;
+					}
 				}
 			}
 			errorCode.push(102);
 			errorLine.push(outputTable.get(--lexemeNumber).getLineNumber());
 			return 102;
+		} else {
+			lexemeNumber--;
 		}
 		return 0;
 	}
@@ -244,7 +252,7 @@ public class ProcedureHandler {
 	public int pLogMult() {
 
 		if (outputTable.get(lexemeNumber++).getLexemeCode() == 27) {
-			if (pLogRatio() == 0) {
+			if (pLogMult() == 0) {
 				return 0;
 			}
 			lexemeNumber--;
@@ -338,13 +346,13 @@ public class ProcedureHandler {
 	public int pMathExp() {
 
 		if (pMathTerm() == 0) {
-			if (outputTable.get(lexemeNumber++).getLexemeCode() == 17) {
+			if (outputTable.get(lexemeNumber++).getLexemeCode() == 17) {// +
 				if (pMathExp() == 0) {
 					return 0;
 				}
 			}
 			lexemeNumber--;
-			if (outputTable.get(lexemeNumber++).getLexemeCode() == 18) {
+			if (outputTable.get(lexemeNumber++).getLexemeCode() == 18) {// -
 				if (pMathExp() == 0) {
 					return 0;
 				}
@@ -361,14 +369,14 @@ public class ProcedureHandler {
 	public int pMathTerm() {
 
 		if (pMathMult() == 0) {
-			if (outputTable.get(lexemeNumber++).getLexemeCode() == 20) {
-				if (pMathMult() == 0) {
+			if (outputTable.get(lexemeNumber++).getLexemeCode() == 20) {// *
+				if (pMathExp() == 0) {
 					return 0;
 				}
 			}
 			lexemeNumber--;
-			if (outputTable.get(lexemeNumber++).getLexemeCode() == 19) {
-				if (pMathMult() == 0) {
+			if (outputTable.get(lexemeNumber++).getLexemeCode() == 19) {// /
+				if (pMathExp() == 0) {
 					return 0;
 				}
 			}
@@ -382,17 +390,17 @@ public class ProcedureHandler {
 
 	public int pMathMult() {
 
-		if (outputTable.get(lexemeNumber++).getLexemeCode() == 35) {
+		if (outputTable.get(lexemeNumber++).getLexemeCode() == 35) {// id
 			return 0;
 		}
 		lexemeNumber--;
-		if (outputTable.get(lexemeNumber++).getLexemeCode() == 36) {
+		if (outputTable.get(lexemeNumber++).getLexemeCode() == 36) {// const
 			return 0;
 		}
 		lexemeNumber--;
-		if (outputTable.get(lexemeNumber++).getLexemeCode() == 33) {
+		if (outputTable.get(lexemeNumber++).getLexemeCode() == 33) {// (
 			if (pMathExp() == 0) {
-				if (outputTable.get(lexemeNumber++).getLexemeCode() == 34) {
+				if (outputTable.get(lexemeNumber++).getLexemeCode() == 34) {// )
 					return 0;
 				}
 			}

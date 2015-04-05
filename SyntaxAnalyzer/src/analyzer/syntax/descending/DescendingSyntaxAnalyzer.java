@@ -24,9 +24,10 @@ public class DescendingSyntaxAnalyzer extends SyntaxAnalyzer {
 			for (int i = 0; i < pHandler.getErrorCode().size(); i++)
 				ErrorHandler.error(pHandler.getErrorCode().get(i), pHandler
 						.getErrorLine().get(i));
+		} else {
+			System.out.println("Code was analyzed.");
+			outputHandler.setCodeWasAnalyzed(true);
 		}
-
-		System.out.println("Syntax analizer worked.");
 
 	}
 

@@ -3,7 +3,7 @@ var , i, n: real
 begin
 i = 3;
 read(, n);
-while n >= i
-do
-write(, n)
+while n >= i do
+write(, n);
+i = 3
 end.

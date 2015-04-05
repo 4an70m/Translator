@@ -4,7 +4,7 @@ import analyzer.syntax.blank.SyntaxAnalyzer;
 import analyzer.util.handler.ErrorHandler;
 import analyzer.util.handler.OutputHandler;
 
-public class StateSyntaxAnalyzer extends SyntaxAnalyzer{
+public class StateSyntaxAnalyzer extends SyntaxAnalyzer {
 
 	private OutputHandler outputHandler;
 	private StateHandler aHandler;
@@ -13,6 +13,7 @@ public class StateSyntaxAnalyzer extends SyntaxAnalyzer{
 		super(outputHandler);
 		this.outputHandler = outputHandler;
 	}
+
 	@Override
 	public void analyzeSyntax() {
 		if (!outputHandler.getCodeWasTranslated()) {
@@ -21,11 +22,13 @@ public class StateSyntaxAnalyzer extends SyntaxAnalyzer{
 		}
 		aHandler = new StateHandler(outputHandler);
 		aHandler.analyzeSynatax();
-		if (aHandler.getErrorCode() != 0)
+		if (aHandler.getErrorCode() != 0) {
 			ErrorHandler
 					.error(aHandler.getErrorCode(), aHandler.getErrorLine());
-		else
-			System.out.println("Finished, yay!");
+		} else {
+			outputHandler.setCodeWasAnalyzed(true);
+			System.out.println("Code was analyzed.");
+		}
 	}
 
 }

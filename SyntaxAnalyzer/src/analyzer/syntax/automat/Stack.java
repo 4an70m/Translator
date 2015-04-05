@@ -4,6 +4,8 @@ import java.util.LinkedList;
 
 public class Stack<T> extends LinkedList<T> {
 
+	public static final long serialVersionUID = 1;
+
 	public void pushBack(T obj) {
 		this.pushBack(obj);
 	}
@@ -14,6 +16,15 @@ public class Stack<T> extends LinkedList<T> {
 
 	public boolean isNull() {
 		return this.isEmpty();
+	}
+
+	public int amountOfOccurance(T obj) {
+		int amount = 0;
+		for (int i = 0; i < this.size(); i++) {
+			if (get(i).equals(obj))
+				amount++;
+		}
+		return amount;
 	}
 
 	@Override

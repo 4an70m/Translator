@@ -6,7 +6,6 @@ import analyzer.util.output.outputtable.OutputTable;
 
 public class StateHandler {
 
-	private OutputHandler outputHandler;
 	private OutputTable outputTable;
 	private Stack<Integer> stack;
 
@@ -16,7 +15,7 @@ public class StateHandler {
 	private int errorLine;
 
 	public StateHandler(OutputHandler outputHandler) {
-		this.outputHandler = outputHandler;
+
 		outputTable = outputHandler.getOutputTable();
 		stack = new Stack<>();
 		errorCode = 0;
@@ -258,7 +257,7 @@ public class StateHandler {
 
 			}
 			case 31: {
-				if (outputTable.get(lexemeNum++).getLexemeCode() == 15) {// ;
+				if (outputTable.get(lexemeNum++).getLexemeCode() == 15) {// :
 					stack.push(31);
 					this.runOperation();
 					state = stack.pop();

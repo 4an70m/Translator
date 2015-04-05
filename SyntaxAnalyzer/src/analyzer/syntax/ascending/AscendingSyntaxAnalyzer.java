@@ -5,7 +5,7 @@ import java.io.IOException;
 import lab4.grammarReader.GrammarReader;
 import lab4.grammarReader.GrammarTable;
 import analyzer.syntax.automat.Stack;
-import analyzer.syntax.automat.stateReader.StatesTable;
+import analyzer.syntax.automat.reader.state.StatesReader;
 import analyzer.syntax.blank.SyntaxAnalyzer;
 import analyzer.util.handler.ErrorHandler;
 import analyzer.util.handler.OutputHandler;
@@ -17,7 +17,7 @@ public class AscendingSyntaxAnalyzer extends SyntaxAnalyzer {
 	private Stack<String> stack;
 	private GrammarTable grammarTable;
 	private StringBuilder tempString;
-	private OutputTableItem currentItem;
+	
 	private int i; // current syntax analyzer position
 	private OutputTableBuilder outputTableBuilder;
 	private int step; // steps for output
@@ -33,7 +33,7 @@ public class AscendingSyntaxAnalyzer extends SyntaxAnalyzer {
 		grammarTable = new GrammarTable(grammarReader);
 		tempString = new StringBuilder();
 		outputTableBuilder = new OutputTableBuilder();
-		int step = 0;
+		this.step = 0;
 	}
 
 	/**
@@ -194,7 +194,7 @@ public class AscendingSyntaxAnalyzer extends SyntaxAnalyzer {
 		// to avoid tons of same code
 		// TODO - if you have free time - rewrite the table for this output
 		try {
-			StatesTable sTable = new StatesTable();
+			StatesReader sTable = new StatesReader();
 
 			sTable.readStates();
 			outputTableBuilder.startWriting();
@@ -207,7 +207,7 @@ public class AscendingSyntaxAnalyzer extends SyntaxAnalyzer {
 			}
 			if (currentItem.getSubstring().equals(FINISHED_KEYWORD)) {
 				restart();
-				System.out.println("Code is correct!");
+				outputHandler.setCodeWasAnalyzed(true);
 			} else {
 				int errorCode = sTable.getErrorByLexemeCode(currentItem
 						.getLexemeCode());

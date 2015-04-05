@@ -1,14 +1,14 @@
 package analyzer.syntax.automat;
 
-import analyzer.syntax.automat.stateReader.Rule;
-import analyzer.syntax.automat.stateReader.State;
-import analyzer.syntax.automat.stateReader.StatesTable;
+import analyzer.syntax.automat.reader.state.Rule;
+import analyzer.syntax.automat.reader.state.State;
+import analyzer.syntax.automat.reader.state.StatesReader;
 import analyzer.util.handler.OutputHandler;
 import analyzer.util.output.outputtable.OutputTable;
 
 public class AutomatHandler {
 
-	private StatesTable st;
+	private StatesReader st;
 	private int state;
 	private OutputTable ot;
 	private int lexemeNum;
@@ -16,7 +16,7 @@ public class AutomatHandler {
 	private int errorCode;
 	private int errorLine;
 
-	public AutomatHandler(OutputHandler outputHandler, StatesTable st) {
+	public AutomatHandler(OutputHandler outputHandler, StatesReader st) {
 		this.st = st;
 		ot = outputHandler.getOutputTable();
 		stack = new Stack<>();

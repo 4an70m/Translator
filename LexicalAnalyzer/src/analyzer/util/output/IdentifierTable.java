@@ -9,13 +9,13 @@ import java.util.ArrayList;
 public class IdentifierTable {
 
 	private ArrayList<TableItem> identifierTable;
-	private int number;
+	private int intId;
 	private File file;
 
 	public IdentifierTable() {
 		identifierTable = new ArrayList<>();
 		file = new File("Output/test.idtable");
-		number = 0;
+		intId = 0;
 	}
 
 	public int addTableItem(String identifier) {
@@ -28,7 +28,7 @@ public class IdentifierTable {
 		}
 
 		if (tempnum == -1) {
-			tempnum = ++number;
+			tempnum = ++intId;
 			TableItem tableItem = new TableItem(identifier, tempnum);
 			identifierTable.add(tableItem);
 		}
@@ -60,4 +60,28 @@ public class IdentifierTable {
 		bWrighter.close();
 	}
 
+	public ArrayList<TableItem> getIdentifierTable() {
+		return identifierTable;
+	}
+
+	public void setIdentifierTable(ArrayList<TableItem> identifierTable) {
+		this.identifierTable = identifierTable;
+	}
+
+	public String getItemByIndex(int index) {
+		for (TableItem t : identifierTable) {
+			if (t.getCode() == index)
+				return t.getItem();
+		}
+		return null;
+	}
+
+	public boolean isIdentifier(String name) {
+		for (TableItem t : identifierTable) {
+			if (t.getItem().equals(name)) {
+				return true;
+			}
+		}
+		return false;
+	}
 }

@@ -2,7 +2,7 @@ package analyzer.syntax.automat;
 
 import java.io.IOException;
 
-import analyzer.syntax.automat.stateReader.StatesTable;
+import analyzer.syntax.automat.reader.state.StatesReader;
 import analyzer.syntax.blank.SyntaxAnalyzer;
 import analyzer.util.handler.ErrorHandler;
 import analyzer.util.handler.OutputHandler;
@@ -11,12 +11,12 @@ public class AutomatSyntaxAnalyzer extends SyntaxAnalyzer{
 
 	private OutputHandler outputHandler;
 	private AutomatHandler aHandler;
-	private StatesTable sTable;
+	private StatesReader sTable;
 
 	public AutomatSyntaxAnalyzer(OutputHandler outputHandler) {
 		super(outputHandler);
 		this.outputHandler = outputHandler;
-		sTable = new StatesTable(); 
+		sTable = new StatesReader(); 
 	}
 
 	@Override
@@ -37,7 +37,10 @@ public class AutomatSyntaxAnalyzer extends SyntaxAnalyzer{
 			ErrorHandler
 					.error(aHandler.getErrorCode(), aHandler.getErrorLine());
 		else
-			System.out.println("Finished, yay!");
+		{
+			System.out.println("Code was analyzed.");
+			outputHandler.setCodeWasAnalyzed(true);
+		}
 	}
 
 }

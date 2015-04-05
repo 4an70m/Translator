@@ -45,4 +45,14 @@ public class ConstantTable {
 		}
 		bWrighter.close();
 	}
+	
+	public String getItemByIndex(int index)
+	{
+		for(TableItem t : constantTable)
+		{
+			if(t.getCode() == index)
+				return t.getItem();
+		}
+		return null; 
+	}
 }
