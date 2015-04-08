@@ -3,7 +3,6 @@ package rpn.builder;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import rpn.builder.util.LabelTableItem;
 import rpn.builder.util.PriorityTable;
 import rpn.builder.util.StackWriterItem;
 import rpn.builder.util.StackWriterTable;
@@ -24,7 +23,8 @@ public class PriorityRPNBuilder extends RPNBuilder {
 	private Stack<String> stack;
 	private StackWriterTable swTable;
 	private int workM;
-	private LinkedList<LabelTableItem> labels;
+	private int newWorkM;
+	Stack<Workgroup> callstack = new Stack<>();
 
 	public PriorityRPNBuilder() throws IOException {
 		this("test.pt");
@@ -39,7 +39,7 @@ public class PriorityRPNBuilder extends RPNBuilder {
 		swTable = new StackWriterTable();
 		swTable.readTable("test.wts");
 		workM = -1;
-		labels = new LinkedList<>();
+		newWorkM = -1;
 	}
 
 	@Override
@@ -66,11 +66,13 @@ public class PriorityRPNBuilder extends RPNBuilder {
 
 			if (t.getSubstring().equals("if")) {
 				index = checkIf(outTable, constantTable, idTable, index);
+				workM = newWorkM;
 				continue;
 			}
 
 			if (t.getSubstring().equals("while")) {
 				index = checkWhile(outTable, constantTable, idTable, index);
+				workM = newWorkM;
 				continue;
 			}
 
@@ -85,26 +87,38 @@ public class PriorityRPNBuilder extends RPNBuilder {
 	private int checkIf(OutputTable outTable, ConstantTable constantTable,
 			IdentifierTable idTable, int index) {
 		// callstack shows the order of calling if after if
-		Stack<Workgroup> callstack = new Stack<>();
+
 		int m = 0; // indexes, used by callstack
 		int fGroup = -1;
 		StackWriterItem item = null;
+		int thisOperationM = workM + 2;
+		boolean mainIf = true;
 		for (OutputTableItem t = outTable.get(index); index < outTable.size(); t = outTable
 				.get(++index)) {
 
-			if (t.getSubstring().equals("if")) {
-				workM += 2;
+			if (t.getSubstring().equals("if") && !mainIf) {
+				index = checkIf(outTable, constantTable, idTable, index);
+				workM = newWorkM;
+				continue;
+			}
+
+			if (t.getSubstring().equals("if") && mainIf) {
+				mainIf = false;
 				fGroup = 2;
+				newWorkM += 2;
+				workM += 2;
 				m++;
 				callstack.push(new Workgroup("if", m));
 			}
 			if (t.getSubstring().equals("else")) {
 				fGroup = 2;
+				workM = thisOperationM;
 				callstack.push(new Workgroup("else", m));
 				m--;
 			}
 			if (t.getSubstring().equals("while")) {
 				index = checkWhile(outTable, constantTable, idTable, index);
+				workM = newWorkM;
 				continue;
 			}
 
@@ -115,11 +129,18 @@ public class PriorityRPNBuilder extends RPNBuilder {
 			}
 
 			routineRPNBiulding(t, item, outTable, constantTable, idTable);
-
+			
 			if (callstack.size() > 1) {
 				Workgroup t2 = callstack.pop(); // stack top
 				Workgroup t1 = callstack.pop(); // under stack top
 				workM -= 2;
+				if ((t1.getId() == t2.getId())
+						&& (t.getSubstring().equals(";") || t.getSubstring()
+								.equals("end."))) {
+					return index;
+				}
+				
+				// ; or end.
 				if ((t1.getId() == t2.getId())
 						&& (t.getSubstring().equals(";") || t.getSubstring()
 								.equals("end."))) {
@@ -128,12 +149,17 @@ public class PriorityRPNBuilder extends RPNBuilder {
 							&& ((t1.getId() == t2.getId()) && (t.getSubstring()
 									.equals(";") || t.getSubstring().equals(
 									"end.")))) {
-						callstack.pop();
-						callstack.pop();
-						m -= 2;
-						rpn.offer(item.getRpnRepresentation(workM));
-						workM -= 2;
+						if (callstack.size() > 1) {
+							callstack.pop();
+							callstack.pop();
+							m -= 2;
+							workM -= 2;
+						} else {
+							break;
+						}
 					}
+
+					// else and else
 				} else if (t1.getId() != t2.getId()
 						&& (t1.getFunction().equals("else") && t2.getFunction()
 								.equals("else"))) {
@@ -142,10 +168,7 @@ public class PriorityRPNBuilder extends RPNBuilder {
 					workM += 2;
 					rpn.offer(item.getRpnRepresentation(workM));
 					workM -= 2;
-					item = swTable.getItemByIdAndFuncGroup(11, fGroup);
-					rpn.offer(item.getRpnRepresentation(workM));
-					callstack.pop();
-					callstack.push(t2);
+					return index - 1;
 				} else {
 					callstack.push(t1);
 					callstack.push(t2);
@@ -153,6 +176,11 @@ public class PriorityRPNBuilder extends RPNBuilder {
 				}
 			}
 			if (callstack.size() == 0) {
+				item = swTable.getItemByIdAndFuncGroup(13, fGroup);
+				rpn.pollLast();
+				rpn.offer(item.getRpnRepresentation(thisOperationM));
+				if (t.getSubstring().equals(";"))
+					return index;
 				return index - 1;
 			}
 		}
@@ -169,6 +197,7 @@ public class PriorityRPNBuilder extends RPNBuilder {
 				.get(++index)) {
 			if (t.getSubstring().equals("while") && firstEnter) {
 				workM += 2;
+				newWorkM += 2;
 				fGroup = 1;
 			}
 
@@ -179,7 +208,7 @@ public class PriorityRPNBuilder extends RPNBuilder {
 			}
 
 			if (t.getSubstring().equals("if")) {
-				index = checkIf(outTable, constantTable, idTable, index);
+				index = checkIf(outTable, constantTable, idTable, index) - 1;
 				continue;
 			}
 
@@ -204,11 +233,10 @@ public class PriorityRPNBuilder extends RPNBuilder {
 				item = swTable.getItemByIdAndFuncGroup(13, 1);
 				routineRPNBiulding(t, item, outTable, constantTable, idTable);
 				workM -= 2;
-				return index - 1;
+				return index;
 			}
 			firstEnter = false;
 		}
-
 		return index;
 	}
 

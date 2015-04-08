@@ -25,21 +25,11 @@ public class SimpleRPNExecutor extends RPNExecutor {
 			return;
 		}
 		rpn = (LinkedList<String>) rpnBuilder.getRpn().clone();
-		LinkedList<String> cycleStack = new LinkedList<String>();
 		LinkedList<String> workStack = new LinkedList<>();
-		boolean insideCycle = false;
 		// main processing loop
 		for (int index = 0; index < rpn.size(); index++) {
 
 			String curItem = rpn.get(index);
-			/*
-			 * if (curItem.matches("m[0-9]*:")) { String stoppingString =
-			 * curItem.substring(0, curItem.length() - 1); rpn.pollFirst(); for
-			 * (int i = index; i < rpn.size(); i++) {
-			 * cycleStack.add(rpn.get(i)); if
-			 * (cycleStack.peekFirst().contains(stoppingString)) { break; } }
-			 * index--; continue; }
-			 */
 			if (idTable.isIdentifier(curItem)) {
 				workStack.push(curItem);
 				continue;
@@ -64,7 +54,7 @@ public class SimpleRPNExecutor extends RPNExecutor {
 						+ ":";
 				if (cond) {
 					rpn.pollFirst();
-					index-=2;
+					index -= 2;
 					continue;
 				} else {
 					curItem = rpn.pollFirst();
@@ -75,7 +65,6 @@ public class SimpleRPNExecutor extends RPNExecutor {
 					continue;
 				}
 			}
-			
 
 			if (curItem.contains("BP")) {
 				boolean cond = Boolean.parseBoolean(workStack.pollFirst());
@@ -84,7 +73,7 @@ public class SimpleRPNExecutor extends RPNExecutor {
 						+ ":";
 				if (cond) {
 					rpn.pollFirst();
-					index-=2;
+					index -= 2;
 					continue;
 				} else {
 					curItem = rpn.pollFirst();
@@ -316,7 +305,5 @@ public class SimpleRPNExecutor extends RPNExecutor {
 
 		RPNExecutor exec = new SimpleRPNExecutor(la.getOutputHandler(), rpn);
 		exec.execute();
-
-		System.out.println("m1223:".matches("m[0-9]*:"));
 	}
 }
