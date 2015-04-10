@@ -129,7 +129,7 @@ public class PriorityRPNBuilder extends RPNBuilder {
 			}
 
 			routineRPNBiulding(t, item, outTable, constantTable, idTable);
-			
+
 			if (callstack.size() > 1) {
 				Workgroup t2 = callstack.pop(); // stack top
 				Workgroup t1 = callstack.pop(); // under stack top
@@ -139,7 +139,7 @@ public class PriorityRPNBuilder extends RPNBuilder {
 								.equals("end."))) {
 					return index;
 				}
-				
+
 				// ; or end.
 				if ((t1.getId() == t2.getId())
 						&& (t.getSubstring().equals(";") || t.getSubstring()
@@ -265,6 +265,16 @@ public class PriorityRPNBuilder extends RPNBuilder {
 
 		// routine stack-rpn movements
 		if (!stack.isNull()) {
+
+			if (stack.peek().equals("(") && t.getSubstring().equals("(")) {
+				stack.push("(");
+				return;
+			}
+			if (stack.peek().equals("[") && t.getSubstring().equals("[")) {
+				stack.push("[");
+				return;
+			}
+
 			int priorityItem = priorityTable
 					.getPriorityByItem(t.getSubstring());
 			int priorityStack = priorityTable.getPriorityByItem(stack.peek());
@@ -296,11 +306,12 @@ public class PriorityRPNBuilder extends RPNBuilder {
 			}
 
 			// popping opening bracket
-			if (t.getSubstring().equals(")") && stack.peek().equals("("))
-				stack.pop();
-			if (t.getSubstring().equals("]") && stack.peek().equals("["))
-				stack.pop();
-
+			if (!stack.isNull()) {
+				if (t.getSubstring().equals(")") && stack.peek().equals("("))
+					stack.pop();
+				if (t.getSubstring().equals("]") && stack.peek().equals("["))
+					stack.pop();
+			}
 			// in case priorityStack < priorityItem
 			if (item.hasStackRepresentation()) {
 				stack.push(item.getStackRepresentation());

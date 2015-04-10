@@ -42,17 +42,21 @@ public class AutomatLexicalAnalyzer extends LexicalAnalyzer {
 		String symb = null;
 		String prevClassType = null;
 		boolean needBack = false;
-outer:
-		while ((sline = reader.readLine()) != null) {
+		outer: while ((sline = reader.readLine()) != null) {
 			int state = 1;
 			sline = sline.trim() + "  ";
-			if (sline.contains("//"))
+			if (sline.contains("//")) {
+				row++;
 				continue;
-			if (sline.contains("/*"))
-				while (!sline.contains("*/"))
+			}
+			if (sline.contains("/*")) {
+				while (!sline.contains("*/")) {
+					row++;
 					sline = reader.readLine();
-			if (sline.contains("*/"))
+				}
+				row++;
 				continue outer;
+			}
 			for (int i = 0; i < sline.length();) {
 				needBack = true;
 				currentState = stateReader.getState(state);

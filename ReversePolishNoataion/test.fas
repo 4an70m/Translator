@@ -1,46 +1,12 @@
 program test
-var ,a ,b:real
+var ,a ,b, c:real
 begin
-/*
-a = 1;
 a = 2;
-a = a;
-a = a + 2;
-a = a - 2;
-a = 2E-2;
-a = 3 * 2;
-a = 3 / 2;
-a = 3 * 2 + 3
-a = 3 + 3 * 2;
-a = (3 + 3) * 2;
-if a < 10 then
-	a = 10;
-	if a < 20 then
-		a = 1
-	else
-		a = 2 
+b = 2;
+c = 3;
+if [a < 1] or [a > 4] then
+	write(,b)
 else
-	if a < 30 then
-		a = 1
-	else
-		a = 2;
-if a < 40 then
-	a = 1
-else
-	a = 2;
+	write(,c)
 
-if a < 50 then
-	a = 1
-else
-	while a < 60 do
-	a = 1
-if a < 1 then 
-	a = 2
-else
-	a = 3;
-write(,a)
-*/
-a = 4;
-b = 5;
-write (,a,b)
 end.

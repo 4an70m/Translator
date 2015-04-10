@@ -21,13 +21,18 @@ public class StateLexicalAnalyzer extends LexicalAnalyzer {
 			String sline = null;
 			outer: while ((sline = reader.readLine()) != null) {
 				String line = sline.trim() + " ";
-				if (line.contains("//"))
+				if (sline.contains("//")) {
+					row++;
 					continue;
-				if (sline.contains("/*"))
-					while (!sline.contains("*/"))
+				}
+				if (sline.contains("/*")) {
+					while (!sline.contains("*/")) {
+						row++;
 						sline = reader.readLine();
-				if (sline.contains("*/"))
+					}
+					row++;
 					continue outer;
+				}
 				int state = 1;
 				StringBuilder lexeme = new StringBuilder();
 

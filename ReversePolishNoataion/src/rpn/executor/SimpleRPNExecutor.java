@@ -14,8 +14,15 @@ import analyzer.util.handler.OutputHandler;
 
 public class SimpleRPNExecutor extends RPNExecutor {
 
+	private LinkedList<String> constrpn;
+	private int globalIndex;
+	private Scanner sc;
+
+	@SuppressWarnings("unchecked")
 	public SimpleRPNExecutor(OutputHandler oHandler, RPNBuilder rpnBuilder) {
 		super(oHandler, rpnBuilder);
+		constrpn = (LinkedList<String>) rpnBuilder.getRpn().clone();
+		globalIndex = -1;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -28,7 +35,7 @@ public class SimpleRPNExecutor extends RPNExecutor {
 		LinkedList<String> workStack = new LinkedList<>();
 		// main processing loop
 		for (int index = 0; index < rpn.size(); index++) {
-
+			globalIndex++;
 			String curItem = rpn.get(index);
 			if (idTable.isIdentifier(curItem)) {
 				workStack.push(curItem);
@@ -46,77 +53,41 @@ public class SimpleRPNExecutor extends RPNExecutor {
 			}
 
 			index = mainSwitch(index, curItem, workStack);
-
-			if (curItem.contains("UPL")) {
-				boolean cond = Boolean.parseBoolean(workStack.pollFirst());
-				rpn.pollFirst();
-				String label = curItem.substring(0, curItem.indexOf("UPL"))
-						+ ":";
-				if (cond) {
-					rpn.pollFirst();
-					index -= 2;
-					continue;
-				} else {
-					curItem = rpn.pollFirst();
-					while (!curItem.contains(label)) {
-						curItem = rpn.pollFirst();
-						index++;
-					}
-					continue;
-				}
-			}
-
-			if (curItem.contains("BP")) {
-				boolean cond = Boolean.parseBoolean(workStack.pollFirst());
-				rpn.pollFirst();
-				String label = curItem.substring(0, curItem.indexOf("UPL"))
-						+ ":";
-				if (cond) {
-					rpn.pollFirst();
-					index -= 2;
-					continue;
-				} else {
-					curItem = rpn.pollFirst();
-					while (!curItem.contains(label)) {
-						curItem = rpn.pollFirst();
-						index++;
-					}
-					continue;
-				}
-			}
 		}
 		System.out.println("Finished " + varMap);
 	}
 
 	private int writeOperation(int index, LinkedList<String> workStack) {
 		String key = null;
-		int minusIndex = 0;
 		while (true) {
-			key = rpn.pollFirst();
-			minusIndex++;
+			index--;
+			rpn.pollFirst();
+			key = workStack.pollLast();
 			Double val = varMap.get(key);
 			if (val == null) {
 				break;
 			}
 			System.out.println(key + " = " + val);
-			workStack.pollFirst();
 		}
-		index -= minusIndex;
 		return index;
 	}
 
 	private int readOperation(int index, LinkedList<String> workStack) {
-		try (Scanner sc = new Scanner(System.in)) {
+		if (sc == null)
+			sc = new Scanner(System.in);
+		try {
 			String key = rpn.pollFirst();
 			rpn.pollFirst();
 			double value = 0;
 			System.out.print(key + " : ");
-			value = sc.nextDouble();
+			if (sc.hasNextDouble())
+				value = sc.nextDouble();
 			varMap.replace(key, value);
 		} catch (NumberFormatException e) {
 			index--;
 		}
 		index--;
+		globalIndex++;
 		return index;
 	}
 
@@ -146,7 +117,7 @@ public class SimpleRPNExecutor extends RPNExecutor {
 			result = value1 + value2;
 			break;
 		case "-":
-			result = value1 - value2;
+			result = value2 - value1;
 			break;
 		case "*":
 			result = value1 * value2;
@@ -159,7 +130,7 @@ public class SimpleRPNExecutor extends RPNExecutor {
 		rpn.add(index - 2, String.valueOf(result));
 		workStack.pop();
 		index -= 4;
-
+		globalIndex -= 2;
 		return index;
 	}
 
@@ -190,17 +161,10 @@ public class SimpleRPNExecutor extends RPNExecutor {
 		case "!=":
 			result = value2 != value1;
 			break;
-		/*
-		 * case "and": result = (value2 == true) && (value1 == true); break;
-		 * 
-		 * case "or": result = value2 >= value1; break;
-		 * 
-		 * case "not": result = value2 >= value1; break;
-		 */
 		}
 		rpn.add(index - 2, String.valueOf(result));
 		index -= 3;
-
+		globalIndex--;
 		return index;
 	}
 
@@ -276,6 +240,18 @@ public class SimpleRPNExecutor extends RPNExecutor {
 			index = logicExpr(index, ">=", workStack);
 			break;
 		}
+		case "and": {
+			index = logicCondition(index, "and", workStack);
+			break;
+		}
+		case "or": {
+			index = logicCondition(index, "or", workStack);
+			break;
+		}
+		case "not": {
+			index = logicCondition(index, "not", workStack);
+			break;
+		}
 		case "WRITE": {
 			index = writeOperation(index, workStack);
 			break;
@@ -285,8 +261,97 @@ public class SimpleRPNExecutor extends RPNExecutor {
 			index = readOperation(index, workStack);
 			break;
 		}
+		default: {
+			if (curItem.contains("UPL")) {
+				Boolean cond = Boolean.parseBoolean(workStack.pop());
+				rpn.pollFirst();
+				rpn.pollFirst();
+
+				if (!cond) {
+					// false
+					String t = curItem.split("UPL")[0];
+					int newIndex = labels.get(t + ":");
+					if (globalIndex < newIndex) {
+						// int diff = newIndex - globalIndex;
+						while (globalIndex < newIndex) {
+							globalIndex++;
+							rpn.pollFirst();
+						}
+						return index - 2;
+					} else {
+						// true
+						// ToDo: finish this block
+						globalIndex = addListFromPos(newIndex);
+					}
+
+				} else {
+					return index - 2;
+				}
+			}
+
+			if (curItem.contains("BP")) {
+				rpn.pollFirst();
+				String t = curItem.split("BP")[0];
+				int newIndex = labels.get(t + ":");
+				if (globalIndex < newIndex) {
+					// int diff = newIndex - globalIndex;
+					while (globalIndex < newIndex) {
+						globalIndex++;
+						rpn.pollFirst();
+					}
+					return -1;
+				} else {
+					// ToDo: finish this block
+					globalIndex = addListFromPos(newIndex);
+					return -1;
+				}
+			}
+
+			if (labels.containsKey(curItem)) {
+				rpn.pollFirst();
+				index--;
+			}
+		}
 		}
 		return index;
+	}
+
+	private int logicCondition(int index, String string,
+			LinkedList<String> workStack) {
+		boolean secondCond = Boolean.parseBoolean(workStack.pollFirst());
+		rpn.pollFirst();
+		boolean firstCond = false;
+		boolean result = false;
+
+		switch (string) {
+		case "and":
+			firstCond = Boolean.parseBoolean(workStack.pollFirst());
+			rpn.pollFirst();
+			result = firstCond && secondCond;
+			break;
+
+		case "or":
+			firstCond = Boolean.parseBoolean(workStack.pollFirst());
+			rpn.pollFirst();
+			result = firstCond || secondCond;
+			break;
+
+		case "not":
+			result = !secondCond;
+			break;
+		}
+		rpn.pollFirst();
+		rpn.add(index - 2, String.valueOf(result));
+		index -= 3;
+		globalIndex--;
+		return index;
+	}
+
+	private int addListFromPos(int newIndex) {
+		for (int i = globalIndex; i >= newIndex; i--) {
+			rpn.push(constrpn.get(i));
+		}
+		return newIndex - 1;
 	}
 
 	public static void main(String[] args) throws IOException {
