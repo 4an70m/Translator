@@ -83,11 +83,11 @@ public class SimpleRPNExecutor extends RPNExecutor {
 			if (sc.hasNextDouble())
 				value = sc.nextDouble();
 			varMap.replace(key, value);
+			workStack.pollLast();
 		} catch (NumberFormatException e) {
 			index--;
 		}
-		index--;
-		globalIndex++;
+		index-=2;
 		return index;
 	}
 

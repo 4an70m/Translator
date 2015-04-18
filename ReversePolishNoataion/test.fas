@@ -1,12 +1,25 @@
 program test
-var ,a ,b, c:real
+var ,a :real
 begin
-a = 2;
-b = 2;
-c = 3;
-if [a < 1] or [a > 4] then
-	write(,b)
-else
-	write(,c)
-
+	read(,a);
+	while a < 10 do
+		if a < 10 then
+			write(,a);
+			a = a + 1
+		else
+			write(,a);
+	read(,a);
+	while a < 10 do
+		if a < 10 then
+			write(,a);
+			a = a + 1
+		else
+			write(,a);
+	a = 102;
+	while a < 10 do
+		if a < 10 then
+			write(,a);
+			a = a + 1
+		else
+			write(,a)			 
 end.
